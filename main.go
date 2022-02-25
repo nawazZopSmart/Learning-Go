@@ -1,28 +1,43 @@
 package main
 
 import (
-	s "./crud/crud.go"
+	"fmt"
+	"log"
+
+	s "github.com/SN786/sqlpractise/crud"
 )
 
 func main() {
-	// db_name := "Employee_Db"
-	table_name := "Employee_Details"
-	// s.CreateTable(db_name, table_name)
+	DBName := "emp"
+	tableName := "employee"
+	s.CreateTable(DBName, tableName)
+	DbCon := s.DbConn("emp")
 
-	db_conn := s.DbConn("Employee_Db")
-	// name := []string{"Richesh", "Sharif", "Sukant", "Ishan"}
-	// email := []string{"r@r.com", "s@s.com", "ss@ss.com", "i@i.com"}
-	// role := []string{"SDE-I", "SDE-I", "SDE-I", "SDE-I"}
-	// err := s.InsertData(table_name, db_conn, name, email, role)
+	err := s.InsertData(DbCon, "Ram Vir", "rv@r.com", "Intern")
+	erri := s.InsertData(DbCon, "Richesh", "rich@r.com", "Intern")
 
-	// if err != nil {
-	// 	log.Fatal("Insert: Error")
-	// }
+	if err != nil {
+		log.Fatalf("Inser Err: %v", err)
+	}
+	if erri != nil {
+		log.Fatalf("Inser Err: %v", err)
+	}
+	// var empDet Employee;
+	empDet, err := s.GetDetailsById(DbCon, 1)
 
-	// s.GetDetailsById(db_conn, 1, table_name)
-	// s.GetDetailsById(db_conn, 2, table_name)
-	// s.GetDetailsById(db_conn, 3, table_name)
-	// s.UpdateById(db_conn, 4, "KAKA", "k@k.com", "SDE-II", table_name)
-	// s.DeleteById(db_conn, 4)
-	s.GetAll(db_conn, table_name)
+	if err != nil {
+		log.Fatalf("GetDetailsById Err: %v", err)
+	}
+
+	fmt.Println(empDet.Name, empDet.Email, empDet.Role)
+
+	err2 := s.UpdateById(DbCon, 1, "Sharif", "k@k.com", "SDE-II")
+	if err2 != nil {
+		log.Fatalf("GetUpdateById Err: %v", err)
+	}
+	err3 := s.DeleteById(DbCon, 1)
+	if err3 != nil {
+		log.Fatalf("DeleteById Err: %v", err)
+	}
+
 }
